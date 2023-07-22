@@ -2,34 +2,82 @@ import 'package:flutter/material.dart';
 import 'package:flutter_todo1/constants/colors.dart';
 import 'package:flutter_todo1/widgets/todo_item.dart';
 
-void main() => runApp(MaterialApp(home: Home()));
+import '../model/todo.dart';
+
+// void main() => runApp(MaterialApp(home: Home()));
 
 class Home extends StatelessWidget {
-  const Home({Key? key}) : super(key: key);
+   Home({Key? key}) : super(key: key);
 
+  final todoList = ToDo.todoList();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: tdBGColor,
       appBar: _buildAppBar(),
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 18, vertical: 20),
-        child: Column(
-          children: [
-            searchBox(),
-            Expanded(
-                child: ListView(
+      body: Stack(
+        children: [
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 18, vertical: 20),
+            child: Column(
               children: [
-                Container(
-                  margin: EdgeInsets.only(top: 50,bottom: 20),
-                  child: Text('All Todo Lists', style: TextStyle(fontSize: 30,fontWeight: FontWeight.w400),),
-                ),
-                ToDoItem(),
-              ],
-            )
+                searchBox(),
+                Expanded(
+                    child: ListView(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(top: 50,bottom: 20),
+                      child: Text('All Todo Lists', style: TextStyle(fontSize: 30,fontWeight: FontWeight.w400),),
+                    ),
+                    for(ToDo CountTodo in todoList)
+                    ToDoItem(todo: CountTodo,),
+                  ],
+                )
     )
-          ],
-        ),
+              ],
+            ),
+          ),
+             Align(
+               alignment: Alignment.bottomCenter,
+               child: Row(children: [
+                 Expanded(child: Container(
+                   margin: EdgeInsets.only(
+                       bottom: 20,right: 20,left:20
+                   ),
+                    padding: EdgeInsets.symmetric(horizontal: 20,vertical: 6),
+                     decoration: BoxDecoration(
+                       color: Colors.white,
+                       boxShadow: const[BoxShadow(
+                         color: Colors.grey,
+                         offset: Offset(0.0, 0.0),
+                         blurRadius: 10.0,
+                         spreadRadius: 0.0,
+                       )]
+                     ),
+                   child: TextField(
+                     decoration: InputDecoration(
+                       hintText: 'Add a new ToDo Item',
+                       border: InputBorder.none,
+                     ),
+                   ),
+                 )),
+                 Container(
+                   margin: EdgeInsets.only(
+                     bottom: 20, right: 20,
+                   ),
+                   child: ElevatedButton(
+                     child: Text('+',style: TextStyle(fontSize: 40),),
+                     onPressed: (){},
+                     style: ElevatedButton.styleFrom(
+                       primary: tdBlue,
+                       minimumSize: Size(60,60),
+                       elevation: 10
+                     ),
+                   ),
+                 ),
+               ],),
+             )
+        ],
       ),
     );
   }
